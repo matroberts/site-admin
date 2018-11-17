@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
 using NUnit.Framework;
 
 namespace siteadmin
@@ -31,13 +32,21 @@ namespace siteadmin
                 .OrderByDescending(f => f)
                 .ToList();
 
-            string posts = $@"
+            var postLinks = new StringBuilder();
+            foreach (var f in filenames)
+            {
+                var doc = new HtmlDocument();
+                doc.Load(Path.Combine(SiteRootPath, f));
+                var title = doc.DocumentNode.SelectSingleNode("//head/title").InnerText;
+                postLinks.AppendLine($"<li><a href=\"{f}\">{title}</a></li>");
+            }
+
+            string content = $@"
 <h3>Posts</h3>
 <ul>
-{string.Join("\r\n", filenames.Select(f => $"<li><a href=\"{f}\">{f}</a></li>"))}
-</ul>";
+{postLinks}
+</ul>
 
-            var littleprojects = $@"
 <h3>Little Projects</h3>
 <ul>
 <li><a href=""code/RsVsShrtCt/Resharper-VisualStudio-Shortcuts.html"">Resharper Shortcuts</a></li>
@@ -50,10 +59,11 @@ namespace siteadmin
                 .Replace("TODO-CANONICALURL", canonicalurl)
                 .Replace("TODO-POSTDATE", postdate)
                 .Replace("TODO-POSTDATE", postdate)
-                .Replace("TODO-CONTENT", posts + littleprojects);
+                .Replace("TODO-CONTENT", content);
 
             File.WriteAllText(Path.Combine(SiteRootPath, filename), newpost, new UTF8Encoding(false));
 
         }
+
     }
 }
