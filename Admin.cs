@@ -62,8 +62,38 @@ namespace siteadmin
                 .Replace("TODO-CONTENT", content);
 
             File.WriteAllText(Path.Combine(SiteRootPath, filename), newpost, new UTF8Encoding(false));
-
         }
 
+        [Test]
+        public void ValidateHtml()
+        {
+            foreach (var path in Directory.GetFiles(SiteRootPath).Where(f => f.EndsWith(".html")))
+            {
+                var doc = new HtmlDocument();
+                doc.Load(Path.Combine(SiteRootPath, path), new UTF8Encoding(false));
+                doc.OptionEmptyCollection = true;  // allows select nodes to return empty collection instead of null, when no matches - WTF were they thinking
+                var file = Path.GetFileName(path);
+
+                // parse errors
+                foreach (var error in doc.ParseErrors)
+                {
+                    Console.WriteLine($"{file}({error.Line},{error.LinePosition}): {error.Code}: {error.Reason}");
+                }
+
+                // <img> tags with a title attribute
+                foreach (var img in doc.DocumentNode.SelectNodes("//img"))
+                {
+                    if(img.ParentNode.Name != "figure")
+                        Console.WriteLine($"{file}({img.Line},{img.LinePosition}): M1: img not in a figure");
+                }
+
+                // <p> tag containing <ul>
+                // <img> tag with empty alt
+                // <title> empty
+                // <meta description> empty
+                // <time> empty
+                //
+            }
+        }
     }
 }
