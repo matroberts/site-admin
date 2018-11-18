@@ -65,6 +65,35 @@ namespace siteadmin
         }
 
         [Test]
+        public void MakeLinks()
+        {
+            var filenames = Directory.GetFiles(SiteRootPath)
+                .Where(f => PostNamePattern.IsMatch(Path.GetFileName(f)))
+                .Select(f => Path.GetFileName(f))
+                .OrderBy(f => f)
+                .ToList();
+
+            for (int i = 0; i < filenames.Count; i++)
+            {
+                var filename = filenames[i];
+                var previous = i-1 < 0 ? "index.html" : filenames[i-1];
+                var next = i+1 >= filenames.Count ? "index.html" : filenames[i+1];
+                string menu = $@"
+<menu>
+<li><a href=""{previous}"">&lt;Previous</a></li>
+<li><a href=""index.html"">Home</a></li>
+<li><a href=""{next}"">Next&gt;</a></li>
+</menu>
+";
+
+                var doc = new HtmlDocument();
+                doc.Load(Path.Combine(SiteRootPath, filename), new UTF8Encoding(false));
+                doc.DocumentNode.SelectSingleNode("//nav").InnerHtml = menu;
+                doc.Save(Path.Combine(SiteRootPath, filename), new UTF8Encoding(false));
+            }
+        }
+
+        [Test]
         public void ValidateHtml()
         {
             foreach (var path in Directory.GetFiles(SiteRootPath).Where(f => f.EndsWith(".html")))
@@ -92,8 +121,10 @@ namespace siteadmin
                 // <title> empty
                 // <meta description> empty
                 // <time> empty
-                //
+                // <canonical url filled in>
             }
         }
+
+
     }
 }
