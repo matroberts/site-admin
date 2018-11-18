@@ -80,9 +80,8 @@ namespace siteadmin
                 var next = i+1 >= filenames.Count ? "index.html" : filenames[i+1];
                 string menu = $@"
 <menu>
-<li><a href=""{previous}"">&lt;Previous</a></li>
-<li><a href=""index.html"">Home</a></li>
-<li><a href=""{next}"">Next&gt;</a></li>
+<li><a href=""{previous}"">Previous</a></li>
+<li><a href=""{next}"">Next</a></li>
 </menu>
 ";
 
