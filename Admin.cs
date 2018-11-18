@@ -41,6 +41,13 @@ namespace siteadmin
                 postLinks.AppendLine($"<li><a href=\"{f}\">{title}</a></li>");
             }
 
+            string menu = $@"
+<menu>
+<li><a href=""{filenames.First()}"">Previous</a></li>
+<li><a href=""{filenames.Last()}"">Next</a></li>
+</menu>
+";
+
             string content = $@"
 <h3>Posts</h3>
 <ul>
@@ -59,6 +66,7 @@ namespace siteadmin
                 .Replace("TODO-CANONICALURL", canonicalurl)
                 .Replace("TODO-POSTDATE", postdate)
                 .Replace("TODO-POSTDATE", postdate)
+                .Replace("TODO-NAV", menu)
                 .Replace("TODO-CONTENT", content);
 
             File.WriteAllText(Path.Combine(SiteRootPath, filename), newpost, new UTF8Encoding(false));
