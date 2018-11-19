@@ -60,6 +60,13 @@ namespace siteadmin
 <li><a href=""code/Typing/Lesson.htm"">Learn to touchtype</a></li>
 <li><a href=""code/Pomodoro/Timer.htm"">Pomodoro Timer</a></li>
 </ul>
+
+<h3>Credits</h3>
+<ul>
+<li><a href=""https://github.com/"">Hosting by Github</a></li>
+<li><a href=""https://prismjs.com/"">Syntax Highlighting by Prism</a></li>
+<li><a href=""https://github.com/csstools/sanitize.css"">Css Reset by sanitize.css</a></li>
+</ul>
 ";
             var newpost = template.Replace("TODO-TITLE", "Struggling for Competence")
                 .Replace("TODO-DESCRIPTION", "Mat Roberts website.  Programming, Development, TDD, Test Driven Design, C#, ASP.NET MVC, SQL Server, Windows")
@@ -129,6 +136,24 @@ namespace siteadmin
                 // <meta description> empty
                 // <time> empty
                 // <canonical url filled in>
+            }
+        }
+
+        [Test, Ignore("")]
+        public void Test()
+        {
+            var filenames = Directory.GetFiles(SiteRootPath)
+                .Where(f => PostNamePattern.IsMatch(Path.GetFileName(f)))
+                .Select(f => Path.GetFileName(f))
+                .OrderByDescending(f => f)
+                .ToList();
+
+            foreach (var filename in filenames)
+            {
+                var doc = new HtmlDocument();
+                doc.Load(Path.Combine(SiteRootPath, filename), new UTF8Encoding(false));
+                doc.DocumentNode.SelectSingleNode("//header/h1").InnerHtml = "<a href=\"index.html\">Struggling&nbsp;for Competence</a>";
+                doc.Save(Path.Combine(SiteRootPath, filename), new UTF8Encoding(false));
             }
         }
 
