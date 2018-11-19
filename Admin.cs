@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using HtmlAgilityPack;
 using NUnit.Framework;
 
@@ -127,12 +126,25 @@ namespace siteadmin
                 foreach (var img in doc.DocumentNode.SelectNodes("//img"))
                 {
                     if(img.ParentNode.Name != "figure")
-                        Console.WriteLine($"{file}({img.Line},{img.LinePosition}): M1: img not in a figure");
+                        Console.WriteLine($"{file}({img.Line},{img.LinePosition}): M0001: img not in a figure");
+
+                    var alt = img.Attributes["alt"]?.Value;
+                    if (alt == null || string.IsNullOrWhiteSpace(alt) || alt.StartsWith("TODO"))
+                        Console.WriteLine($"{file}({img.Line},{img.LinePosition}): M0002: img doens't have a valid alt attribute");
+
+                    var title = img.Attributes["title"]?.Value;
+                    if (title == null || string.IsNullOrWhiteSpace(title) || title.StartsWith("TODO"))
+                        Console.WriteLine($"{file}({img.Line},{img.LinePosition}): M0003: img doens't have a valid title attribute");
+
+                    var src = img.Attributes["src"]?.Value;
+                    if (src == null || src.StartsWith("images/") == false)
+                        Console.WriteLine($"{file}({img.Line},{img.LinePosition}): M0004: img doens't have a valid src attribute");
+
+                    if(img.Attributes.Count != 3)
+                        Console.WriteLine($"{file}({img.Line},{img.LinePosition}): M0005: img has unwanted attributes");
                 }
 
                 // <p> tag containing <ul>
-                // <img> tag with empty alt
-                // <title> empty
                 // <meta description> empty
                 // <time> empty
                 // <canonical url filled in>
