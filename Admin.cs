@@ -125,7 +125,7 @@ namespace siteadmin
                 // <img> tags with a title attribute
                 foreach (var img in doc.DocumentNode.SelectNodes("//img"))
                 {
-                    if(img.ParentNode.Name != "figure")
+                    if(img.ParentNode.Name != "figure" && img.ParentNode.ParentNode.Name != "figure")
                         Console.WriteLine($"{file}({img.Line},{img.LinePosition}): M0001: img not in a figure");
 
                     var alt = img.Attributes["alt"]?.Value;
@@ -143,6 +143,7 @@ namespace siteadmin
                     if(img.Attributes.Count != 3)
                         Console.WriteLine($"{file}({img.Line},{img.LinePosition}): M0005: img has unwanted attributes");
                 }
+
 
                 // <p> tag containing <ul>
                 // <meta description> empty
