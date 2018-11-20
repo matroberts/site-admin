@@ -65,6 +65,7 @@ namespace siteadmin
 <li><a href=""https://github.com/"">Hosting by Github</a></li>
 <li><a href=""https://prismjs.com/"">Syntax Highlighting by Prism</a></li>
 <li><a href=""https://github.com/csstools/sanitize.css"">Css Reset by sanitize.css</a></li>
+<li><a href=""https://html-agility-pack.net/"">Mass edits by Html Agility Pack</a></li>
 </ul>
 ";
             var newpost = template.Replace("TODO-TITLE", "Struggling for Competence")
@@ -153,7 +154,7 @@ namespace siteadmin
         }
 
         [Test, Ignore("")]
-        public void Test()
+        public void ManipulateAllDocs()
         {
             var filenames = Directory.GetFiles(SiteRootPath)
                 .Where(f => PostNamePattern.IsMatch(Path.GetFileName(f)))
@@ -161,11 +162,18 @@ namespace siteadmin
                 .OrderByDescending(f => f)
                 .ToList();
 
+            //<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+
             foreach (var filename in filenames)
             {
                 var doc = new HtmlDocument();
                 doc.Load(Path.Combine(SiteRootPath, filename), new UTF8Encoding(false));
-                doc.DocumentNode.SelectSingleNode("//header/h1").InnerHtml = "<a href=\"index.html\">Struggling&nbsp;for Competence</a>";
+                var head = doc.DocumentNode.SelectSingleNode("//head");
+                var refChild = head.ChildNodes.Last();
+                var newChild = HtmlNode.CreateNode("<link href=\"https://fonts.googleapis.com/css?family=Inconsolata\" rel=\"stylesheet\">");
+                head.InsertAfter(HtmlNode.CreateNode("\r\n"), refChild);
+                head.InsertAfter(newChild, refChild);
+                head.InsertAfter(doc.CreateTextNode("    "), refChild);
                 doc.Save(Path.Combine(SiteRootPath, filename), new UTF8Encoding(false));
             }
         }
