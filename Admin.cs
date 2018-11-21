@@ -175,7 +175,11 @@ namespace siteadmin
                         Console.WriteLine($"{file}({table.Line},{table.LinePosition}): M0031: table not in a figure");
                 }
 
-                // <p> tag containing <ul>
+                foreach (var ul in doc.DocumentNode.SelectNodes("//ul"))
+                {
+                    if (ul.ParentNode.Name == "p")
+                        Console.WriteLine($"{file}({ul.Line},{ul.LinePosition}): M0032: ul should not be in a p tag");
+                }
             }
         }
 
