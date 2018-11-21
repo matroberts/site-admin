@@ -139,7 +139,7 @@ namespace siteadmin
                 if (canonicalText == "" || canonicalText.StartsWith("TODO") || canonicalText.EndsWith(file) == false)
                     Console.WriteLine($"{file}({canonicalNode?.Line},{canonicalNode?.LinePosition}): M0012: canonical url not set, or does not match filename");
 
-                // <img> tags with a title attribute
+                // <img> in a figure, alt and title tags set, src tag to the images folder
                 foreach (var img in doc.DocumentNode.SelectNodes("//img"))
                 {
                     if(img.ParentNode.Name != "figure" && img.ParentNode.ParentNode.Name != "figure")
@@ -161,13 +161,19 @@ namespace siteadmin
                         Console.WriteLine($"{file}({img.Line},{img.LinePosition}): M0005: img has unwanted attributes");
                 }
 
-                // figcaption
+                // figcaption - nested inside two figures
                 foreach (var figcaption in doc.DocumentNode.SelectNodes("//figcaption"))
                 {
                     if(figcaption.Ancestors().Count(a => a.Name == "figure") != 2)
                         Console.WriteLine($"{file}({figcaption.Line},{figcaption.LinePosition}): M0005: figcaption needs to be in a figure which is itself nested in a figure");
                 }
 
+                // table - in a figure
+                foreach (var table in doc.DocumentNode.SelectNodes("//table"))
+                {
+                    if (table.ParentNode.Name != "figure" && table.ParentNode.ParentNode.Name != "figure")
+                        Console.WriteLine($"{file}({table.Line},{table.LinePosition}): M0031: table not in a figure");
+                }
 
                 // <p> tag containing <ul>
             }
