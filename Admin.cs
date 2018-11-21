@@ -169,15 +169,18 @@ namespace siteadmin
                 var doc = new HtmlDocument();
                 doc.Load(Path.Combine(SiteRootPath, filename), new UTF8Encoding(false));
                 var head = doc.DocumentNode.SelectSingleNode("//head");
-                var refChild = head.ChildNodes.Last();
-                var newChild = HtmlNode.CreateNode("<link href=\"https://fonts.googleapis.com/css?family=Inconsolata\" rel=\"stylesheet\">");
-                head.InsertAfter(HtmlNode.CreateNode("\r\n"), refChild);
-                head.InsertAfter(newChild, refChild);
-                head.InsertAfter(doc.CreateTextNode("    "), refChild);
+                var fontlink = doc.DocumentNode.SelectNodes("//head/link").SingleOrDefault(n => n.Attributes["href"]?.Value.StartsWith("https://fonts.googleapis.com") ?? false);
+                head.RemoveChild(fontlink);
                 doc.Save(Path.Combine(SiteRootPath, filename), new UTF8Encoding(false));
             }
         }
 
+        //var head = doc.DocumentNode.SelectSingleNode("//head");
+        //var refChild = head.ChildNodes.Last();
+        //var newChild = HtmlNode.CreateNode("<link href=\"https://fonts.googleapis.com/css?family=Inconsolata\" rel=\"stylesheet\">");
+        //head.InsertAfter(HtmlNode.CreateNode("\r\n"), refChild);
+        //head.InsertAfter(newChild, refChild);
+        //head.InsertAfter(doc.CreateTextNode("    "), refChild);
 
     }
 }
