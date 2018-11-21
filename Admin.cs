@@ -123,6 +123,22 @@ namespace siteadmin
                     Console.WriteLine($"{file}({error.Line},{error.LinePosition}): {error.Code}: {error.Reason}");
                 }
 
+                // seo
+                var headNode = doc.DocumentNode.SelectSingleNode("//head/title");
+                var headText = headNode?.InnerText ?? "";
+                if (headText == "" || headText.StartsWith("TODO"))
+                    Console.WriteLine($"{file}({headNode?.Line},{headNode?.LinePosition}): M0010: title not set");
+
+                var descriptionNode = doc.DocumentNode.SelectSingleNode("//head/meta[@name='description']");
+                var descriptionText = descriptionNode?.Attributes["content"].Value ?? "";
+                if (descriptionText == "" || descriptionText.StartsWith("TODO"))
+                    Console.WriteLine($"{file}({descriptionNode?.Line},{descriptionNode?.LinePosition}): M0011: meta description not set");
+
+                var canonicalNode = doc.DocumentNode.SelectSingleNode("//head/link[@rel='canonical']");
+                var canonicalText = canonicalNode?.Attributes["href"].Value ?? "";
+                if (canonicalText == "" || canonicalText.StartsWith("TODO") || canonicalText.EndsWith(file) == false)
+                    Console.WriteLine($"{file}({canonicalNode?.Line},{canonicalNode?.LinePosition}): M0012: canonical url not set, or does not match filename");
+
                 // <img> tags with a title attribute
                 foreach (var img in doc.DocumentNode.SelectNodes("//img"))
                 {
@@ -154,9 +170,6 @@ namespace siteadmin
 
 
                 // <p> tag containing <ul>
-                // <meta description> empty
-                // <time> empty
-                // <canonical url filled in>
             }
         }
 
