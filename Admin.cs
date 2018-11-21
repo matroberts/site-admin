@@ -145,6 +145,13 @@ namespace siteadmin
                         Console.WriteLine($"{file}({img.Line},{img.LinePosition}): M0005: img has unwanted attributes");
                 }
 
+                // figcaption
+                foreach (var figcaption in doc.DocumentNode.SelectNodes("//figcaption"))
+                {
+                    if(figcaption.Ancestors().Count(a => a.Name == "figure") != 2)
+                        Console.WriteLine($"{file}({figcaption.Line},{figcaption.LinePosition}): M0005: figcaption needs to be in a figure which is itself nested in a figure");
+                }
+
 
                 // <p> tag containing <ul>
                 // <meta description> empty
