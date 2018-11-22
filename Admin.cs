@@ -48,7 +48,6 @@ namespace siteadmin
 ";
 
             string content = $@"
-<h3>Posts</h3>
 <ul>
 {postLinks}
 </ul>
@@ -68,8 +67,8 @@ namespace siteadmin
 <li><a href=""https://html-agility-pack.net/"">Mass edits by Html Agility Pack</a></li>
 </ul>
 ";
-            var newpost = template.Replace("TODO-TITLE", "Struggling for Competence")
-                .Replace("TODO-DESCRIPTION", "Mat Roberts website.  Programming, Development, TDD, Test Driven Design, C#, ASP.NET MVC, SQL Server, Windows")
+            var newpost = template.Replace("TODO-TITLE", "Articles")
+                .Replace("TODO-DESCRIPTION", "Articles on Programming, Test Driven Development, C#, Javascript, ASP.NET MVC and SQL Server, with a bit of maths and science thrown in too. ")
                 .Replace("TODO-CANONICALURL", canonicalurl)
                 .Replace("TODO-POSTDATE", postdate)
                 .Replace("TODO-POSTDATE", postdate)
@@ -192,25 +191,27 @@ namespace siteadmin
                 .OrderByDescending(f => f)
                 .ToList();
 
-            //<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
-
             foreach (var filename in filenames)
             {
                 var doc = new HtmlDocument();
                 doc.Load(Path.Combine(SiteRootPath, filename), new UTF8Encoding(false));
+
                 var head = doc.DocumentNode.SelectSingleNode("//head");
-                var fontlink = doc.DocumentNode.SelectNodes("//head/link").SingleOrDefault(n => n.Attributes["href"]?.Value.StartsWith("https://fonts.googleapis.com") ?? false);
-                head.RemoveChild(fontlink);
+                var refChild = head.ChildNodes.Last();
+                var newChild = HtmlNode.CreateNode("<link href=\"https://fonts.googleapis.com/css?family=Nunito+Sans\" rel =\"stylesheet\">");
+                head.InsertAfter(HtmlNode.CreateNode("\r\n"), refChild);
+                head.InsertAfter(newChild, refChild);
+                head.InsertAfter(doc.CreateTextNode("    "), refChild);
+
                 doc.Save(Path.Combine(SiteRootPath, filename), new UTF8Encoding(false));
             }
         }
 
+
+
         //var head = doc.DocumentNode.SelectSingleNode("//head");
-        //var refChild = head.ChildNodes.Last();
-        //var newChild = HtmlNode.CreateNode("<link href=\"https://fonts.googleapis.com/css?family=Inconsolata\" rel=\"stylesheet\">");
-        //head.InsertAfter(HtmlNode.CreateNode("\r\n"), refChild);
-        //head.InsertAfter(newChild, refChild);
-        //head.InsertAfter(doc.CreateTextNode("    "), refChild);
+        //var fontlink = doc.DocumentNode.SelectNodes("//head/link").SingleOrDefault(n => n.Attributes["href"]?.Value.StartsWith("https://fonts.googleapis.com") ?? false);
+        //head.RemoveChild(fontlink);
 
     }
 }
