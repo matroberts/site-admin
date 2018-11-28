@@ -15,7 +15,14 @@ namespace siteadmin
         public string SiteRootPath { get; } = Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\matroberts.github.io");
         public string TemplatePath { get; } = Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\RedirectTemplate.html");
 
-        public new Dictionary<string, string> Redirects = new Dictionary<string, string>
+        List<string> ExtraLinks = new List<string>
+        {
+            "http://moleseyhill.com/code/Pomodoro/Timer.htm",
+            "http://moleseyhill.com/code/RsVsShrtCt/Resharper-VisualStudio-Shortcuts.html",
+            "http://moleseyhill.com/code/Typing/Lesson.htm",
+        };
+
+        public Dictionary<string, string> Redirects = new Dictionary<string, string>
             {
                 {"http://moleseyhill.com/blog/"                                                                  , "index.html" },
 
@@ -119,10 +126,13 @@ namespace siteadmin
             }
         }
 
+
+
         [Test]
         public void MakeTestLinks()
         {
-            foreach (var testurl in Redirects.Keys.Select(oldUrl => "https://matroberts.github.io/" + oldUrl.Substring("http://moleseyhill.com/".Length)))
+            var allUrls = Redirects.Keys.Concat(ExtraLinks);
+            foreach (var testurl in allUrls.Select(oldUrl => "https://matroberts.github.io/" + oldUrl.Substring("http://moleseyhill.com/".Length)))
             {
                 Console.WriteLine(testurl);
             }
