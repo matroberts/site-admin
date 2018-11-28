@@ -80,6 +80,34 @@ namespace siteadmin
         }
 
         [Test]
+        public void Make404()
+        {
+            var template = File.ReadAllText(TemplatePath);
+            var postdate = DateTime.UtcNow.ToString("yyyy-MM-dd");
+            var filename = "404.html";
+            var canonicalurl = $"https://moleseyhill.com/{filename}";
+
+            
+            string menu = $@"
+<menu>
+<li><a href=""index.html"">Next</a></li>
+</menu>
+";
+
+            string content = $@"
+<p>Sorry I couldn't find that page.  Maybe you'll have more luck <a href=""index.html"">searching through the index</a>.</p>
+";
+            var newpost = template.Replace("TODO-TITLE", "Page not found")
+                .Replace("TODO-DESCRIPTION", "That page could not be found")
+                .Replace("TODO-CANONICALURL", canonicalurl)
+                .Replace("TODO-POSTDATE", postdate)
+                .Replace("TODO-NAV", menu)
+                .Replace("TODO-CONTENT", content);
+
+            File.WriteAllText(Path.Combine(SiteRootPath, filename), newpost, new UTF8Encoding(false));
+        }
+
+        [Test]
         public void MakeLinks()
         {
             var filenames = Directory.GetFiles(SiteRootPath)
