@@ -37,7 +37,8 @@ namespace siteadmin
                 var doc = new HtmlDocument();
                 doc.Load(Path.Combine(SiteRootPath, f));
                 var title = doc.DocumentNode.SelectSingleNode("//head/title").InnerText;
-                postLinks.AppendLine($"<li><a href=\"{f}\">{title}</a></li>");
+                var description = doc.DocumentNode.SelectSingleNode("//head/meta[@name='description']")?.Attributes["content"].Value ?? "";
+                postLinks.AppendLine($"<dt><a href=\"{f}\">{title}</a></dt><dd>{description}</dd>");
             }
 
             string menu = $@"
@@ -48,24 +49,24 @@ namespace siteadmin
 ";
 
             string content = $@"
-<ul>
+<dl>
 {postLinks}
-</ul>
+</dl>
 
 <h3>Little Projects</h3>
-<ul>
-<li><a href=""code/RsVsShrtCt/Resharper-VisualStudio-Shortcuts.html"">Resharper Shortcuts</a></li>
-<li><a href=""code/Typing/Lesson.htm"">Learn to touchtype</a></li>
-<li><a href=""code/Pomodoro/Timer.htm"">Pomodoro Timer</a></li>
-</ul>
+<dl>
+<dt><a href=""code/RsVsShrtCt/Resharper-VisualStudio-Shortcuts.html"">Resharper Shortcuts</a></dt><dd>Selected Resharper and Visual Studio Keyboad Shortcuts (IntelliJ Keybindings).</dd>
+<dt><a href=""code/Typing/Lesson.htm"">Learn to touchtype</a></dt><dd>Online tool for learning to touch type.</dd>
+<dt><a href=""code/Pomodoro/Timer.htm"">Pomodoro Timer</a></dt><dd>Online timer for the Pomodoro technique.</dd>
+</dl>
 
 <h3>Credits</h3>
-<ul>
-<li><a href=""https://github.com/"">Hosting by Github</a></li>
-<li><a href=""https://prismjs.com/"">Syntax Highlighting by Prism</a></li>
-<li><a href=""https://github.com/csstools/sanitize.css"">Css Reset by sanitize.css</a></li>
-<li><a href=""https://html-agility-pack.net/"">Mass edits by Html Agility Pack</a></li>
-</ul>
+<dl>
+<dt><a href=""https://github.com/"">Hosting by Github</a></dt>
+<dt><a href=""https://prismjs.com/"">Syntax Highlighting by Prism</a></dt>
+<dt><a href=""https://github.com/csstools/sanitize.css"">Css Reset by sanitize.css</a></dt>
+<dt><a href=""https://html-agility-pack.net/"">Mass edits by Html Agility Pack</a></dt>
+</dl>
 ";
             var newpost = template.Replace("TODO-TITLE", "Articles")
                 .Replace("TODO-DESCRIPTION", "Articles on Programming, Test Driven Development, C#, Javascript, ASP.NET MVC and SQL Server, with a bit of maths and science thrown in too. ")
