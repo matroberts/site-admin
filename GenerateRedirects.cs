@@ -103,6 +103,9 @@ namespace siteadmin
                 {"http://moleseyhill.com/blog/credits/"                                                          , "index.html" },
                 {"http://moleseyhill.com/blog/about/"                                                            , "index.html" },
                 {"http://moleseyhill.com/blog/archives/"                                                         , "index.html" },
+
+                // Only tag based link i could find
+                {"http://moleseyhill.com/blog/tag/create-login/"                                                 , "2009-06-08-test-msbuild-from-mstest.html" }
             };
 
         [Test]
