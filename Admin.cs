@@ -80,6 +80,33 @@ namespace siteadmin
         }
 
         [Test]
+        public void MakeSitemap()
+        {
+            var extraFiles = new List<string>()
+            {
+                "https://moleseyhill.com/code/Pomodoro/Timer.htm",
+                "https://moleseyhill.com/code/RsVsShrtCt/Resharper-VisualStudio-Shortcuts.html",
+                "https://moleseyhill.com/code/Typing/Lesson.htm",
+            };
+
+            var excludedFiles = new List<string>()
+            {
+                "404.html",
+            };
+
+            var filenames = Directory.GetFiles(SiteRootPath)
+                .Select(f => Path.GetFileName(f))
+                .Where(f => excludedFiles.Contains(f) == false)
+                .Where(f => f.EndsWith("html") == true)
+                .OrderByDescending(f => f)
+                .Select(f => $"https://moleseyhill.com/{f}")
+                .Concat(extraFiles)
+                .ToList();
+
+            File.WriteAllLines(Path.Combine(SiteRootPath, "sitemap.txt"), filenames, new UTF8Encoding(false));
+        }
+
+        [Test]
         public void Make404()
         {
             var template = File.ReadAllText(TemplatePath);
