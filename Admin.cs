@@ -105,6 +105,19 @@ namespace siteadmin
                 .Replace("TODO-CONTENT", content);
 
             File.WriteAllText(Path.Combine(SiteRootPath, filename), newpost, new UTF8Encoding(false));
+
+            // Add noindex to the head
+            var doc = new HtmlDocument();
+            doc.Load(Path.Combine(SiteRootPath, filename), new UTF8Encoding(false));
+
+            var head = doc.DocumentNode.SelectSingleNode("//head");
+            var refChild = head.ChildNodes.Last();
+            var newChild = HtmlNode.CreateNode("<meta name=\"robots\" content=\"noindex\">");
+            head.InsertAfter(HtmlNode.CreateNode("\r\n"), refChild);
+            head.InsertAfter(newChild, refChild);
+            head.InsertAfter(doc.CreateTextNode("    "), refChild);
+
+            doc.Save(Path.Combine(SiteRootPath, filename), new UTF8Encoding(false));
         }
 
         [Test]
