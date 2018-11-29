@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Admin.cs" />
+    <Compile Include="drafts\NUnitAssertThatExamples.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GenerateRedirects.cs" />
   </ItemGroup>
