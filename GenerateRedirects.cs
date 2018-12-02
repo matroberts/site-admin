@@ -108,7 +108,7 @@ namespace siteadmin
                 {"http://moleseyhill.com/blog/tag/create-login/"                                                 , "2009-06-08-test-msbuild-from-mstest.html" }
             };
 
-        [Test]
+        [Test, Ignore("")]
         public void Generate()
         {
             var template = File.ReadAllText(TemplatePath);
@@ -131,11 +131,15 @@ namespace siteadmin
 
 
 
-        [Test]
+        [Test, Ignore("")]
         public void MakeTestLinks()
         {
             var allUrls = Redirects.Keys.Concat(ExtraLinks);
-            foreach (var testurl in allUrls.Select(oldUrl => "https://matroberts.github.io/" + oldUrl.Substring("http://moleseyhill.com/".Length)))
+//            foreach (var testurl in allUrls.Select(oldUrl => "https://matroberts.github.io/" + oldUrl.Substring("http://moleseyhill.com/".Length)))
+//            {
+//                Console.WriteLine(testurl);
+//            }
+            foreach (var testurl in allUrls)
             {
                 Console.WriteLine(testurl);
             }
