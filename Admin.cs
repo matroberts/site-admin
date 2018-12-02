@@ -204,7 +204,7 @@ namespace siteadmin
 
                 var canonicalNode = doc.DocumentNode.SelectSingleNode("//head/link[@rel='canonical']");
                 var canonicalText = canonicalNode?.Attributes["href"].Value ?? "";
-                if (canonicalText == "" || canonicalText.StartsWith("TODO") || canonicalText.EndsWith(file) == false)
+                if (canonicalText == "" || canonicalText.StartsWith("TODO") || canonicalText.EndsWith(file) == false || canonicalText.StartsWith("https://moleseyhill.com") == false)
                     Console.WriteLine($"{file}({canonicalNode?.Line},{canonicalNode?.LinePosition}): M0012: canonical url not set, or does not match filename");
 
                 // <img> in a figure, alt and title tags set, src tag to the images folder
