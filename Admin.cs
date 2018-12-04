@@ -170,9 +170,9 @@ namespace siteadmin
 ";
 
                 var doc = new HtmlDocument();
-                doc.Load(Path.Combine(SiteRootPath, filename), new UTF8Encoding(false));
+                doc.Load(Path.Combine(SiteRootPath, filename), new UTF8Encoding(true));
                 doc.DocumentNode.SelectSingleNode("//nav").InnerHtml = menu;
-                doc.Save(Path.Combine(SiteRootPath, filename), new UTF8Encoding(false));
+                doc.Save(Path.Combine(SiteRootPath, filename), new UTF8Encoding(true));
             }
         }
 
