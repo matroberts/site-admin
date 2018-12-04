@@ -182,7 +182,7 @@ namespace siteadmin
             foreach (var path in Directory.GetFiles(SiteRootPath).Where(f => f.EndsWith(".html")))
             {
                 var doc = new HtmlDocument();
-                doc.Load(Path.Combine(SiteRootPath, path), new UTF8Encoding(false));
+                doc.Load(Path.Combine(SiteRootPath, path), new UTF8Encoding(true));
                 doc.OptionEmptyCollection = true;  // allows select nodes to return empty collection instead of null, when no matches - WTF were they thinking
                 var file = Path.GetFileName(path);
 
@@ -264,7 +264,7 @@ namespace siteadmin
             foreach (var filename in filenames)
             {
                 var doc = new HtmlDocument();
-                doc.Load(Path.Combine(SiteRootPath, filename), new UTF8Encoding(false));
+                doc.Load(Path.Combine(SiteRootPath, filename), new UTF8Encoding(true));
 
                 var head = doc.DocumentNode.SelectSingleNode("//head");
                 var refChild = head.ChildNodes.Last();
@@ -273,7 +273,7 @@ namespace siteadmin
                 head.InsertAfter(newChild, refChild);
                 head.InsertAfter(doc.CreateTextNode("    "), refChild);
 
-                doc.Save(Path.Combine(SiteRootPath, filename), new UTF8Encoding(false));
+                doc.Save(Path.Combine(SiteRootPath, filename), new UTF8Encoding(true));
             }
         }
 
