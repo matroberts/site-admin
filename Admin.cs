@@ -77,7 +77,7 @@ namespace siteadmin
                 .Replace("TODO-NAV", menu)
                 .Replace("TODO-CONTENT", content);
 
-            File.WriteAllText(Path.Combine(SiteRootPath, filename), newpost, new UTF8Encoding(false));
+            File.WriteAllText(Path.Combine(SiteRootPath, filename), newpost, new UTF8Encoding(true));
         }
 
         [Test]
@@ -104,7 +104,7 @@ namespace siteadmin
                 .Concat(extraFiles)
                 .ToList();
 
-            File.WriteAllLines(Path.Combine(SiteRootPath, "sitemap.txt"), filenames, new UTF8Encoding(false));
+            File.WriteAllLines(Path.Combine(SiteRootPath, "sitemap.txt"), filenames, new UTF8Encoding(true));
         }
 
         [Test]
@@ -132,11 +132,11 @@ namespace siteadmin
                 .Replace("TODO-NAV", menu)
                 .Replace("TODO-CONTENT", content);
 
-            File.WriteAllText(Path.Combine(SiteRootPath, filename), newpost, new UTF8Encoding(false));
+            File.WriteAllText(Path.Combine(SiteRootPath, filename), newpost, new UTF8Encoding(true));
 
             // Add noindex to the head
             var doc = new HtmlDocument();
-            doc.Load(Path.Combine(SiteRootPath, filename), new UTF8Encoding(false));
+            doc.Load(Path.Combine(SiteRootPath, filename), new UTF8Encoding(true));
 
             var head = doc.DocumentNode.SelectSingleNode("//head");
             var refChild = head.ChildNodes.Last();
@@ -145,7 +145,7 @@ namespace siteadmin
             head.InsertAfter(newChild, refChild);
             head.InsertAfter(doc.CreateTextNode("    "), refChild);
 
-            doc.Save(Path.Combine(SiteRootPath, filename), new UTF8Encoding(false));
+            doc.Save(Path.Combine(SiteRootPath, filename), new UTF8Encoding(true));
         }
 
         [Test]
