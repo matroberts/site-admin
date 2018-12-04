@@ -108,7 +108,7 @@ namespace siteadmin
                 {"http://moleseyhill.com/blog/tag/create-login/"                                                 , "2009-06-08-test-msbuild-from-mstest.html" }
             };
 
-        [Test, Ignore("")]
+        [Test]
         public void Generate()
         {
             var template = File.ReadAllText(TemplatePath);
@@ -125,7 +125,7 @@ namespace siteadmin
 
                 // write the redirect into the index file for the folder
                 var filename = Path.Combine(folder, "index.html");
-                File.WriteAllText(filename, redirect, new UTF8Encoding(false));
+                File.WriteAllText(filename, redirect, new UTF8Encoding(true));
             }
         }
 
