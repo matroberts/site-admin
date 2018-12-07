@@ -104,8 +104,14 @@ namespace siteadmin
                 {"http://moleseyhill.com/blog/about/"                                                            , "index.html" },
                 {"http://moleseyhill.com/blog/archives/"                                                         , "index.html" },
 
-                // Only tag based link i could find
-                {"http://moleseyhill.com/blog/tag/create-login/"                                                 , "2009-06-08-test-msbuild-from-mstest.html" }
+                // Tags taken from google search console
+                {"http://moleseyhill.com/blog/tag/create-login/"                                                 , "2009-06-08-test-msbuild-from-mstest.html" },
+                {"http://moleseyhill.com/blog/tag/dreyfus-model/"                                                , "2009-08-27-dreyfus-model.html" },
+                {"http://moleseyhill.com/blog/tag/pragmatic-thinking-and-learning/"                              , "2009-08-27-dreyfus-model.html" },
+                {"http://moleseyhill.com/blog/tag/unit-of-work-pattern/"                                         , "2009-12-02-fluent-nhibernate-unit-of-work-pattern.html" },
+                {"http://moleseyhill.com/blog/tag/approximate-geometric-mean/"                                   , "2009-11-13-guesstimation.html" },
+                {"http://moleseyhill.com/blog/tag/http11/"                                                       , "2009-06-02-http-basics.html" },
+                {"http://moleseyhill.com/blog/category/uncategorized/"                                           , "index.html" },
             };
 
         [Test]

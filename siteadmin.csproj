@@ -65,8 +65,9 @@
   <ItemGroup>
     <None Include="RedirectTemplate.html" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="drafts\" />
+    <Content Include="drafts\how-to-name-tests.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
