@@ -62,11 +62,11 @@ namespace siteadmin
 
 <h3>Credits</h3>
 <dl>
-<dt><a href=""https://github.com/"">Hosting by Github</a></dt>
-<dt><a href=""https://github.com/csstools/sanitize.css"">Css Reset by sanitize.css</a></dt>
-<dt><a href=""https://prismjs.com/"">Syntax Highlighting by Prism</a></dt>
-<dt><a href=""https://katex.org/"">Maths by Katex</a></dt>
-<dt><a href=""https://html-agility-pack.net/"">Mass edits by Html Agility Pack</a></dt>
+<dt><a href=""https://github.com/"">Hosting by Github</a></dt><dd></dd>
+<dt><a href=""https://github.com/csstools/sanitize.css"">Css Reset by sanitize.css</a></dt><dd></dd>
+<dt><a href=""https://prismjs.com/"">Syntax Highlighting by Prism</a></dt><dd></dd>
+<dt><a href=""https://katex.org/"">Maths by Katex</a></dt><dd></dd>
+<dt><a href=""https://html-agility-pack.net/"">Mass edits by Html Agility Pack</a></dt><dd></dd>
 </dl>
 ";
             var newpost = template.Replace("TODO-TITLE", "Articles")

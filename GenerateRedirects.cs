@@ -138,21 +138,28 @@ namespace siteadmin
 
 
         [Test, Ignore("")]
-        public void MakeTestLinks()
+        public void MakeListOfRedirects()
         {
             var allUrls = Redirects.Keys.Concat(ExtraLinks);
-//            foreach (var testurl in allUrls.Select(oldUrl => "https://matroberts.github.io/" + oldUrl.Substring("http://moleseyhill.com/".Length)))
-//            {
-//                Console.WriteLine(testurl);
-//            }
             foreach (var testurl in allUrls)
             {
                 Console.WriteLine(testurl);
             }
-            
+        }
+
+        [Test, Ignore("")]
+        public void MakeListOfCurrentLinks()
+        {
+            var filenames = Directory.GetFiles(SiteRootPath)
+                .Where(f => f.EndsWith(".html"))
+                .Select(f => "https://moleseyhill.com/" + Path.GetFileName(f))
+                .OrderBy(f => f)
+                .ToList();
+
+            foreach (var filename in filenames.Concat(ExtraLinks))
+            {
+                Console.WriteLine(filename);
+            }
         }
     }
-
-
-
 }
