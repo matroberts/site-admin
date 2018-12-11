@@ -68,7 +68,10 @@ namespace siteadmin
 <dt><a href=""https://katex.org/"">Maths by Katex</a></dt><dd></dd>
 <dt><a href=""https://html-agility-pack.net/"">Mass edits by Html Agility Pack</a></dt><dd></dd>
 </dl>
-";
+
+<h3>Copyright</h3>
+<p>Except where otherwise noted, the material on this site is licensed under the <a rel=""license"" href=""http://creativecommons.org/licenses/by/4.0/"">Creative Commons Attribution 4.0 International License</a>.</p>
+            ";
             var newpost = template.Replace("TODO-TITLE", "Articles")
                 .Replace("TODO-DESCRIPTION", "Articles on Programming, Test Driven Development, C#, Javascript, ASP.NET MVC and SQL Server, with a bit of maths and science thrown in too. ")
                 .Replace("TODO-CANONICALURL", canonicalurl)
