@@ -37,6 +37,9 @@
     <Reference Include="HtmlAgilityPack, Version=1.8.10.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>packages\HtmlAgilityPack.1.8.10\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
+    <Reference Include="NHunspell, Version=1.2.5554.16953, Culture=neutral, PublicKeyToken=1ac793ea843b4366, processorArchitecture=MSIL">
+      <HintPath>packages\NHunspell.1.2.5554.16953\lib\net\NHunspell.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.11.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>packages\NUnit.3.11.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
@@ -53,8 +56,11 @@
     <Compile Include="Admin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GenerateRedirects.cs" />
+    <Compile Include="Spellcheck.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="dictionary\en-GB.aff" />
+    <None Include="dictionary\en-GB.dic" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -67,7 +73,15 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="dictionary\README_en_GB.txt" />
+    <Content Include="dictionary\specials.txt" />
     <Content Include="drafts\how-to-name-tests.html" />
+    <None Include="Hunspellx64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Hunspellx86.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

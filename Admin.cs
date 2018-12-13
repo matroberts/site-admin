@@ -255,6 +255,41 @@ namespace siteadmin
             }
         }
 
+        [Test]
+        public void CheckSpelling()
+        {
+            using (var spellCheck = new Spellcheck(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\dictionary")))
+            {
+                foreach (var path in Directory.GetFiles(SiteRootPath).Where(f => f.EndsWith(".html")).Take(5))
+                {
+                    var file = Path.GetFileName(path);
+
+                    var doc = new HtmlDocument();
+                    doc.Load(path);
+                    var lines = doc.DocumentNode.SelectNodes("//text()").Where(n => n.Ancestors().Count(a => a.Name == "code") == 0).Select(n => n.InnerText).Where(t => string.IsNullOrWhiteSpace(t) == false).ToList();
+                    lines.Add(doc.DocumentNode.SelectSingleNode("//head/meta[@name='description']")?.Attributes["content"].Value ?? "");
+
+                    var mistakes = new List<string>();
+                    foreach (var line in lines)
+                    {
+                        mistakes.AddRange(spellCheck.Spell(line));
+                    }
+
+                    if(mistakes.Count == 0)
+                        Console.WriteLine($"Pass {file}");
+                    else
+                    {
+                        foreach (var line in lines)
+                        {
+                            Console.WriteLine(line);
+                        }
+                        Console.WriteLine($"Fail {file}");
+                        Console.WriteLine($"**" + string.Join("**", mistakes) + "**");
+                    }
+                }
+            }
+        }
+
         [Test, Ignore("")]
         public void ManipulateAllDocs()
         {
