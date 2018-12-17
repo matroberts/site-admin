@@ -114,7 +114,14 @@ namespace siteadmin
                 {"http://moleseyhill.com/blog/category/uncategorized/"                                           , "index.html" },
             };
 
-        [Test]
+
+        /*
+         * Generate Redirects makes the redirect files from the old wordpress blog urls to the new static site urls
+         * These links should not need regenerating they are working correctly according to google search console
+         * The redirect links need to stay in place permanently, since most of the inbound links to the site use the old urls.
+         */
+
+        [Test, Ignore("")]
         public void Generate()
         {
             var template = File.ReadAllText(TemplatePath);
@@ -134,8 +141,6 @@ namespace siteadmin
                 File.WriteAllText(filename, redirect, new UTF8Encoding(true));
             }
         }
-
-
 
         [Test, Ignore("")]
         public void MakeListOfRedirects()

@@ -17,6 +17,18 @@ namespace siteadmin
 
         public Regex PostNamePattern = new Regex(@"\d\d\d\d-\d\d-\d\d-.*\.html");
 
+        /*
+         * These are the admin scripts for the moleseyhill website
+         *
+         * 1. MakeIndex         - makes the index page                                  - you need to run this after making a new post, or if you want to change the homepage in another way
+         * 2. MakeSitemap       - makes the search engine sitemap                       - you need to run this after making a new post
+         * 3. MakeLinks         - fills in the previous and next links on all the posts - you need to run this after making a new post
+         * 4. ValidateHtml      - validates the html meets the conventions of the site  - you need to run this after making a new post
+         * 5. CheckSpelling     - does a spellcheck of all the html                     - you need to run this after making a new post
+         * 6. Make404           - makes the 404 page                                    - you only need to run this if you want to change the 404 page
+         * 7. ManipulateAllDocs - used to make changes to all the page on the site      - don't run this, you need to customise it first
+         */
+
         [Test]
         public void MakeIndex()
         {
@@ -111,47 +123,6 @@ namespace siteadmin
                 .ToList();
 
             File.WriteAllLines(Path.Combine(SiteRootPath, "sitemap.txt"), filenames, new UTF8Encoding(true));
-        }
-
-        [Test]
-        public void Make404()
-        {
-            var template = File.ReadAllText(TemplatePath);
-            var postdate = DateTime.UtcNow.ToString("yyyy-MM-dd");
-            var filename = "404.html";
-            var canonicalurl = $"https://moleseyhill.com/{filename}";
-
-            
-            string menu = $@"
-<menu>
-<li><a href=""index.html"">Next</a></li>
-</menu>
-";
-
-            string content = $@"
-<p>Sorry I couldn't find that page.  Maybe you'll have more luck <a href=""index.html"">searching through the index</a>.</p>
-";
-            var newpost = template.Replace("TODO-TITLE", "Page not found")
-                .Replace("TODO-DESCRIPTION", "That page could not be found")
-                .Replace("TODO-CANONICALURL", canonicalurl)
-                .Replace("TODO-POSTDATE", postdate)
-                .Replace("TODO-NAV", menu)
-                .Replace("TODO-CONTENT", content);
-
-            File.WriteAllText(Path.Combine(SiteRootPath, filename), newpost, new UTF8Encoding(true));
-
-            // Add noindex to the head
-            var doc = new HtmlDocument();
-            doc.Load(Path.Combine(SiteRootPath, filename), new UTF8Encoding(true));
-
-            var head = doc.DocumentNode.SelectSingleNode("//head");
-            var refChild = head.ChildNodes.Last();
-            var newChild = HtmlNode.CreateNode("<meta name=\"robots\" content=\"noindex\">");
-            head.InsertAfter(HtmlNode.CreateNode("\r\n"), refChild);
-            head.InsertAfter(newChild, refChild);
-            head.InsertAfter(doc.CreateTextNode("    "), refChild);
-
-            doc.Save(Path.Combine(SiteRootPath, filename), new UTF8Encoding(true));
         }
 
         [Test]
@@ -310,6 +281,47 @@ namespace siteadmin
         }
 
         [Test, Ignore("")]
+        public void Make404()
+        {
+            var template = File.ReadAllText(TemplatePath);
+            var postdate = DateTime.UtcNow.ToString("yyyy-MM-dd");
+            var filename = "404.html";
+            var canonicalurl = $"https://moleseyhill.com/{filename}";
+
+
+            string menu = $@"
+<menu>
+<li><a href=""index.html"">Next</a></li>
+</menu>
+";
+
+            string content = $@"
+<p>Sorry I couldn't find that page.  Maybe you'll have more luck <a href=""index.html"">searching through the index</a>.</p>
+";
+            var newpost = template.Replace("TODO-TITLE", "Page not found")
+                .Replace("TODO-DESCRIPTION", "That page could not be found")
+                .Replace("TODO-CANONICALURL", canonicalurl)
+                .Replace("TODO-POSTDATE", postdate)
+                .Replace("TODO-NAV", menu)
+                .Replace("TODO-CONTENT", content);
+
+            File.WriteAllText(Path.Combine(SiteRootPath, filename), newpost, new UTF8Encoding(true));
+
+            // Add noindex to the head
+            var doc = new HtmlDocument();
+            doc.Load(Path.Combine(SiteRootPath, filename), new UTF8Encoding(true));
+
+            var head = doc.DocumentNode.SelectSingleNode("//head");
+            var refChild = head.ChildNodes.Last();
+            var newChild = HtmlNode.CreateNode("<meta name=\"robots\" content=\"noindex\">");
+            head.InsertAfter(HtmlNode.CreateNode("\r\n"), refChild);
+            head.InsertAfter(newChild, refChild);
+            head.InsertAfter(doc.CreateTextNode("    "), refChild);
+
+            doc.Save(Path.Combine(SiteRootPath, filename), new UTF8Encoding(true));
+        }
+
+        [Test, Ignore("")]
         public void ManipulateAllDocs()
         {
             var filenames = Directory.GetFiles(SiteRootPath)
@@ -330,15 +342,12 @@ namespace siteadmin
                 head.InsertAfter(newChild, refChild);
                 head.InsertAfter(doc.CreateTextNode("    "), refChild);
 
+                //var head = doc.DocumentNode.SelectSingleNode("//head");
+                //var fontlink = doc.DocumentNode.SelectNodes("//head/link").SingleOrDefault(n => n.Attributes["href"]?.Value.StartsWith("https://fonts.googleapis.com") ?? false);
+                //head.RemoveChild(fontlink);
+
                 doc.Save(Path.Combine(SiteRootPath, filename), new UTF8Encoding(true));
             }
         }
-
-
-
-        //var head = doc.DocumentNode.SelectSingleNode("//head");
-        //var fontlink = doc.DocumentNode.SelectNodes("//head/link").SingleOrDefault(n => n.Attributes["href"]?.Value.StartsWith("https://fonts.googleapis.com") ?? false);
-        //head.RemoveChild(fontlink);
-
     }
 }
