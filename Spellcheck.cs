@@ -13,7 +13,7 @@ namespace siteadmin
     public class Spellcheck : IDisposable
     {
         private Hunspell Hunspell = null;
-        private char[] Punctuation = new char[] { ',', '.', ';', '?', '-', '(', ')', '"', ':', '/', '[', ']' };
+        private char[] Punctuation = new char[] { ',', '.', ';', '?', '-', '(', ')', '"', ':', '/', '[', ']', '\'' };
 
         public Spellcheck(string dictionaryPath)
         {

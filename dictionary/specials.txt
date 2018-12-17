@@ -5,3 +5,4 @@ ASP.NET
 artifact
 artifacts
 web.config
+w3wp.exe

@@ -23,7 +23,7 @@ namespace siteadmin
             var template = File.ReadAllText(TemplatePath);
             var postdate = DateTime.UtcNow.ToString("yyyy-MM-dd");
             var filename = "index.html";
-            var canonicalurl = $"https://moleseyhill.com/{filename}";
+            var canonicalurl = $"https://moleseyhill.com";
 
             var filenames = Directory.GetFiles(SiteRootPath)
                 .Where(f => PostNamePattern.IsMatch(Path.GetFileName(f)))
@@ -81,6 +81,9 @@ namespace siteadmin
                 .Replace("TODO-CONTENT", content);
 
             File.WriteAllText(Path.Combine(SiteRootPath, filename), newpost, new UTF8Encoding(true));
+
+            // http://www.crawler-lib.net/nhunspell
+            // https://addons.mozilla.org/en-US/firefox/addon/british-english-dictionary-2/
         }
 
         [Test]
@@ -258,6 +261,10 @@ namespace siteadmin
         [Test]
         public void CheckSpelling()
         {
+            var ignore = new Dictionary<string, List<string>>()
+            {
+                {"2009-03-24-aspnet-session-state.html", new List<string>(){ "InProc", "SQLServer", "StateServer", "ASPState", @"AUTHORITY\NETWORK", "db_owner" } },
+            };
             using (var spellCheck = new Spellcheck(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\dictionary")))
             {
                 foreach (var path in Directory.GetFiles(SiteRootPath).Where(f => f.EndsWith(".html")).Take(5))
@@ -272,7 +279,19 @@ namespace siteadmin
                     var mistakes = new List<string>();
                     foreach (var line in lines)
                     {
-                        mistakes.AddRange(spellCheck.Spell(line));
+                        var spellingMistakes = spellCheck.Spell(line);
+                        foreach (var spellingMistake in spellingMistakes)
+                        {
+                            if (ignore.ContainsKey(file) && ignore[file].Contains(spellingMistake))
+                            {
+                                // ignore these mistakes on this page
+                            }
+                            else
+                            {
+                                mistakes.Add(spellingMistake);
+                            }
+                        }
+
                     }
 
                     if(mistakes.Count == 0)
