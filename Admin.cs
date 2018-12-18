@@ -25,7 +25,7 @@ namespace siteadmin
          * 3. MakeLinks         - fills in the previous and next links on all the posts - you need to run this after making a new post
          * 4. ValidateHtml      - validates the html meets the conventions of the site  - you need to run this after making a new post
          * 5. CheckSpelling     - does a spellcheck of all the html                     - you need to run this after making a new post
-         * 6. Make404           - makes the 404 page                                    - you only need to run this if you want to change the 404 page
+         * 6. Make404           - makes the 404 page                                    - you only need to run this if you want to change the 404 page, it references index.html BTW
          * 7. ManipulateAllDocs - used to make changes to all the page on the site      - don't run this, you need to customise it first
          */
 
@@ -235,16 +235,23 @@ namespace siteadmin
             var ignore = new Dictionary<string, List<string>>()
             {
                 {"2009-03-24-aspnet-session-state.html", new List<string>(){ "InProc", "SQLServer", "StateServer", "ASPState", @"AUTHORITY\NETWORK", "db_owner" } },
+                {"2009-03-29-picks-theorem.html", new List<string>(){ "=", "+", "15/2", "P/2" } },
+                {"2009-04-13-csharp-ienumerable-yield.html", new List<string>(){ "IEnumerable" } },
             };
             using (var spellCheck = new Spellcheck(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\dictionary")))
             {
-                foreach (var path in Directory.GetFiles(SiteRootPath).Where(f => f.EndsWith(".html")).Take(5))
+                foreach (var path in Directory.GetFiles(SiteRootPath).Where(f => f.EndsWith(".html")).Take(9))
                 {
                     var file = Path.GetFileName(path);
 
                     var doc = new HtmlDocument();
                     doc.Load(path);
-                    var lines = doc.DocumentNode.SelectNodes("//text()").Where(n => n.Ancestors().Count(a => a.Name == "code") == 0).Select(n => n.InnerText).Where(t => string.IsNullOrWhiteSpace(t) == false).ToList();
+                    var lines = doc.DocumentNode
+                        .SelectNodes("//text()")
+                        .Where(n => n.Ancestors().Count(a => a.Name == "code") == 0)
+                        .Where(n => n.Ancestors().Count(a => a.Name == "div" && a.HasClass("maths")) == 0)
+                        .Select(n => n.InnerText)
+                        .Where(t => string.IsNullOrWhiteSpace(t) == false).ToList();
                     lines.Add(doc.DocumentNode.SelectSingleNode("//head/meta[@name='description']")?.Attributes["content"].Value ?? "");
 
                     var mistakes = new List<string>();

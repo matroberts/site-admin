@@ -6,3 +6,11 @@ artifact
 artifacts
 web.config
 w3wp.exe
+Pick's
+Crilly
+Georg
+Sedgewick
+Kata
+atari
+struct
+foreach
