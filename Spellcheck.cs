@@ -30,7 +30,7 @@ namespace siteadmin
         public List<string> Spell(string words)
         {
             var mistakes = new List<string>();
-            foreach (var word in words.Replace("&nbsp;", " ").Replace("&gt;", " ").Replace("&lt;", " ").Replace("...", " ").Replace("&times;", " ").Split().Select(word => word.Trim(Punctuation)))
+            foreach (var word in words.Replace("&nbsp;", " ").Replace("&gt;", " ").Replace("&lt;", " ").Replace("...", " ").Replace("&times;", " ").Replace("&amp", " ").Split().Select(word => word.Trim(Punctuation)))
             {
                 if (Hunspell.Spell(word) == false)
                 {

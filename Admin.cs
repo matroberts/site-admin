@@ -182,7 +182,7 @@ namespace siteadmin
 
                 var canonicalNode = doc.DocumentNode.SelectSingleNode("//head/link[@rel='canonical']");
                 var canonicalText = canonicalNode?.Attributes["href"].Value ?? "";
-                if (canonicalText == "" || canonicalText.StartsWith("TODO") || canonicalText.EndsWith(file) == false || canonicalText.StartsWith("https://moleseyhill.com") == false)
+                if (canonicalText == "" || canonicalText.StartsWith("TODO")  || canonicalText.StartsWith("https://moleseyhill.com") == false || (canonicalText.EndsWith(file) == false && file != "index.html"))
                     Console.WriteLine($"{file}({canonicalNode?.Line},{canonicalNode?.LinePosition}): M0012: canonical url not set, or does not match filename");
 
                 // <img> in a figure, alt and title tags set, src tag to the images folder
@@ -237,10 +237,13 @@ namespace siteadmin
                 {"2009-03-24-aspnet-session-state.html", new List<string>(){ "InProc", "SQLServer", "StateServer", "ASPState", @"AUTHORITY\NETWORK", "db_owner" } },
                 {"2009-03-29-picks-theorem.html", new List<string>(){ "=", "+", "15/2", "P/2" } },
                 {"2009-04-13-csharp-ienumerable-yield.html", new List<string>(){ "IEnumerable" } },
+                {"2009-04-27-first-steps-javascript-jquery.html", new List<string>(){ "interest.html", "interest.js", "interest.test.html" } },
+                {"2009-05-11-css-enlightenment.html", new List<string>(){ "Theater" } },
+                {"2009-05-25-how-many-bugs.html", new List<string>(){ "E1xE2/S", "InProc", "7/3", "=" } },
             };
             using (var spellCheck = new Spellcheck(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\dictionary")))
             {
-                foreach (var path in Directory.GetFiles(SiteRootPath).Where(f => f.EndsWith(".html")).Take(9))
+                foreach (var path in Directory.GetFiles(SiteRootPath).Where(f => f.EndsWith(".html")).Take(16))
                 {
                     var file = Path.GetFileName(path);
 

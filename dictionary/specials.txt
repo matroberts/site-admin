@@ -14,3 +14,13 @@ Kata
 atari
 struct
 foreach
+Swedberg
+QUnit
+intellisense
+IE6
+Sams
+Coplien's
+out-of-controlness
+hiddenness
+Eastaway
+HTTP/1.1
