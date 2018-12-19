@@ -185,6 +185,14 @@ namespace siteadmin
                 if (canonicalText == "" || canonicalText.StartsWith("TODO")  || canonicalText.StartsWith("https://moleseyhill.com") == false || (canonicalText.EndsWith(file) == false && file != "index.html"))
                     Console.WriteLine($"{file}({canonicalNode?.Line},{canonicalNode?.LinePosition}): M0012: canonical url not set, or does not match filename");
 
+                var h1Count = doc.DocumentNode.SelectNodes("//h1").Count;
+                if (h1Count != 1)
+                    Console.WriteLine($"{file}: M0013: there can be only one h1 tag");
+
+                var h2Count = doc.DocumentNode.SelectNodes("//h2").Count;
+                if (h2Count != 1)
+                    Console.WriteLine($"{file}: M0014: there can be only one h2 tag");
+
                 // <img> in a figure, alt and title tags set, src tag to the images folder
                 foreach (var img in doc.DocumentNode.SelectNodes("//img"))
                 {
@@ -290,7 +298,7 @@ namespace siteadmin
             }
         }
 
-        [Test, Ignore("")]
+        [Test]
         public void Make404()
         {
             var template = File.ReadAllText(TemplatePath);
@@ -345,19 +353,25 @@ namespace siteadmin
                 var doc = new HtmlDocument();
                 doc.Load(Path.Combine(SiteRootPath, filename), new UTF8Encoding(true));
 
-                var head = doc.DocumentNode.SelectSingleNode("//head");
-                var refChild = head.ChildNodes.Last();
-                var newChild = HtmlNode.CreateNode("<link href=\"https://fonts.googleapis.com/css?family=Nunito+Sans\" rel =\"stylesheet\">");
-                head.InsertAfter(HtmlNode.CreateNode("\r\n"), refChild);
-                head.InsertAfter(newChild, refChild);
-                head.InsertAfter(doc.CreateTextNode("    "), refChild);
+                var oldH1 = doc.DocumentNode.SelectSingleNode("//h1");
+                var oldH2 = doc.DocumentNode.SelectSingleNode("//h2");
+                oldH1.Name = "h2";
+                oldH2.Name = "h1";
 
-                //var head = doc.DocumentNode.SelectSingleNode("//head");
-                //var fontlink = doc.DocumentNode.SelectNodes("//head/link").SingleOrDefault(n => n.Attributes["href"]?.Value.StartsWith("https://fonts.googleapis.com") ?? false);
-                //head.RemoveChild(fontlink);
+
 
                 doc.Save(Path.Combine(SiteRootPath, filename), new UTF8Encoding(true));
             }
         }
+
+        //var refChild = head.ChildNodes.Last();
+        //var newChild = HtmlNode.CreateNode("<link href=\"https://fonts.googleapis.com/css?family=Nunito+Sans\" rel =\"stylesheet\">");
+        //head.InsertAfter(HtmlNode.CreateNode("\r\n"), refChild);
+        //head.InsertAfter(newChild, refChild);
+        //head.InsertAfter(doc.CreateTextNode("    "), refChild);
+
+        //var head = doc.DocumentNode.SelectSingleNode("//head");
+        //var fontlink = doc.DocumentNode.SelectNodes("//head/link").SingleOrDefault(n => n.Attributes["href"]?.Value.StartsWith("https://fonts.googleapis.com") ?? false);
+        //head.RemoveChild(fontlink);
     }
 }
