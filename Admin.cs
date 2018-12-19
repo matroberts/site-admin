@@ -101,7 +101,7 @@ namespace siteadmin
         [Test]
         public void MakeSitemap()
         {
-            var extraFiles = new List<string>()
+            var extraLinks = new List<string>()
             {
                 "https://moleseyhill.com/code/Pomodoro/Timer.htm",
                 "https://moleseyhill.com/code/RsVsShrtCt/Resharper-VisualStudio-Shortcuts.html",
@@ -113,16 +113,19 @@ namespace siteadmin
                 "404.html",
             };
 
-            var filenames = Directory.GetFiles(SiteRootPath)
-                .Select(f => Path.GetFileName(f))
-                .Where(f => excludedFiles.Contains(f) == false)
-                .Where(f => f.EndsWith("html") == true)
-                .OrderByDescending(f => f)
-                .Select(f => $"https://moleseyhill.com/{f}")
-                .Concat(extraFiles)
-                .ToList();
+            var canonicalLinks = new List<string>();
+            foreach (var file in Directory.GetFiles(SiteRootPath).Where(f => excludedFiles.Contains(Path.GetFileName(f)) == false).Where(f => f.EndsWith("html") == true).OrderByDescending(f => f))
+            {
+                var doc = new HtmlDocument();
+                doc.Load(Path.Combine(SiteRootPath, file), new UTF8Encoding(true));
+                doc.OptionEmptyCollection = true;
 
-            File.WriteAllLines(Path.Combine(SiteRootPath, "sitemap.txt"), filenames, new UTF8Encoding(true));
+                var canonicalLink = doc.DocumentNode.SelectSingleNode("//head/link[@rel='canonical']").Attributes["href"].Value;
+                canonicalLinks.Add(canonicalLink);
+            }
+
+            canonicalLinks.AddRange(extraLinks);
+            File.WriteAllLines(Path.Combine(SiteRootPath, "sitemap.txt"), canonicalLinks, new UTF8Encoding(true));
         }
 
         [Test]
